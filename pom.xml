@@ -27,6 +27,7 @@
 
     <modules>
         <module>bonita-connector-ldap-def</module>
+        <module>bonita-connector-ldap-impl</module>
     </modules>
 
     <scm>
