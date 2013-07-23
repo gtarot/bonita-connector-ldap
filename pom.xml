@@ -25,6 +25,10 @@
         </plugins>
     </build>
 
+    <modules>
+        <module>bonita-connector-ldap-def</module>
+    </modules>
+
     <scm>
         <developerConnection>scm:git:git@github.com:bonitasoft/bonita-connector-ldap.git</developerConnection>
         <connection>scm:git:git@github.com:bonitasoft/bonita-connector-ldap.git</connection>
