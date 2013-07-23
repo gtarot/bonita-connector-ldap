@@ -22,7 +22,6 @@ public class LdapConnectorTests extends TestCase {
   public static Test suite() {
     TestSuite suite = new TestSuite("LDAP Connector Tests");
     suite.addTestSuite(LdapConnectorTest.class);
-    suite.addTestSuite(LdapRoleResolverTest.class);
     return suite;
   }
 

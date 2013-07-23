@@ -106,8 +106,8 @@ public class LdapConnector extends AbstractConnector {
     private String filter = null;
     private LdapDereferencingAlias derefAliases = LdapDereferencingAlias.ALWAYS;
     private String[] attributes = null;
-    private long sizeLimit = 0;
-    private int timeLimit = 0;
+    private Long sizeLimit = 0l;
+    private Integer timeLimit = 0;
     private String referralHandling = "ignore";
 
     // output
@@ -432,44 +432,79 @@ public class LdapConnector extends AbstractConnector {
     @Override
     public void validateInputParameters() throws ConnectorValidationException {
         final List<String> errors = new ArrayList<String>();
-        if (getHost().length() == 0) {
+        if (host == null || host.length() == 0) {
             errors.add("host cannot be empty!");
         }
-        if (getPort() < 0) {
+
+        if (userName == null || userName.length() == 0) {
+            if (password != null && password.length() != 0) {
+                errors.add("password cannot be empty!");
+            }
+        } else {
+            if (password == null || password.length() == 0) {
+                errors.add("username cannot be empty!");
+            }
+        }
+
+
+        if (baseObject == null || baseObject.length() == 0) {
+            errors.add("baseObject cannot be empty!");
+        }
+
+        if (filter == null || filter.length() == 0) {
+            errors.add("filter cannot be empty!");
+        }
+
+        if (port < 0) {
             errors.add("port cannot be less than 0!");
         } else if (getPort() > 65535) {
             errors.add("port cannot be greater than 65535!");
         }
-        switch (getProtocol()) {
-            case LDAP:
-            case LDAPS:
-            case TLS:
-                break;
-            default:
-                errors.add("Unknown protocol");
-                break;
+
+        if (protocol == null) {
+            errors.add("protocol cannot be null");
+        } else {
+            switch (getProtocol()) {
+                case LDAP:
+                case LDAPS:
+                case TLS:
+                    break;
+                default:
+                    errors.add("Unknown protocol");
+                    break;
+            }
         }
-        switch (getScope()) {
-            case BASE:
-            case ONELEVEL:
-            case SUBTREE:
-                break;
-            default:
-                errors.add("Unknown scope");
-                break;
+
+        if (scope == null) {
+            errors.add("scope cannot be null");
+        } else {
+            switch (getScope()) {
+                case BASE:
+                case ONELEVEL:
+                case SUBTREE:
+                    break;
+                default:
+                    errors.add("Unknown scope");
+                    break;
+            }
+
         }
+
         if (getCertificatePath() != null) {
             final File temp = new File(certificatePath);
             if (!temp.exists()) {
                 errors.add("Certificate path does not refer to a real file!");
             }
         }
-        if (getSizeLimit() < 0) {
+
+        if (sizeLimit == null || sizeLimit < 0) {
             errors.add("sizeLimit cannot be null or negative");
         }
-        if (getTimeLimit() < 0) {
+
+        if (timeLimit == null || getTimeLimit() < 0) {
             errors.add("timeLimit cannot be null or negative");
         }
+
         if (getReferralHandling() == null) {
             errors.add("referralHandling is null!");
         } else if (!getReferralHandling().equals("ignore") && !getReferralHandling().equals("follow")) {
