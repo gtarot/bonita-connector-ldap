@@ -311,18 +311,18 @@ public class LdapConnector extends AbstractConnector {
 
     public void setInputParameters(Map<String, Object> parameters) {
         setHost((String) parameters.get(HOST));
-        setHost((String) parameters.get(PORT));
-        setHost((String) parameters.get(PROTOCOL));
-        setHost((String) parameters.get(USERNAME));
-        setHost((String) parameters.get(PASSWORD));
-        setHost((String) parameters.get(BASE_OBJECT));
-        setHost((String) parameters.get(SCOPE));
-        setHost((String) parameters.get(FILTER));
-        setHost((String) parameters.get(ATTRIBUTES));
-        setHost((String) parameters.get(SIZE_LIMIT));
-        setHost((String) parameters.get(TIME_LIMIT));
-        setHost((String) parameters.get(REFERRAL_HANDLING));
-        setHost((String) parameters.get(DEREF_ALIASES));
+        setPort((Integer) parameters.get(PORT));
+        setProtocol((String) parameters.get(PROTOCOL));
+        setUserName((String) parameters.get(USERNAME));
+        setPassword((String) parameters.get(PASSWORD));
+        setBaseObject((String) parameters.get(BASE_OBJECT));
+        setScope((String) parameters.get(SCOPE));
+        setFilter((String) parameters.get(FILTER));
+        setAttributes((String) parameters.get(ATTRIBUTES));
+        setSizeLimit((Long) parameters.get(SIZE_LIMIT));
+        setTimeLimit((Long) parameters.get(TIME_LIMIT));
+        setReferralHandling((String) parameters.get(REFERRAL_HANDLING));
+        setDerefAliases((String) parameters.get(DEREF_ALIASES));
     }
 
     private Hashtable<String, String> getEnvironment() {
