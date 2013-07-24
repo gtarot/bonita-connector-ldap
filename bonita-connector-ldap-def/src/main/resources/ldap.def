@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition:ConnectorDefinition xmlns:definition="http://www.bonitasoft.org/ns/connector/definition/6.1"
                                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<id>database-access</id>
+	<id>ldap</id>
 	<version>1.0.0</version>
-	<icon>mysql.png</icon>
+	<icon>ldap.png</icon>
 
 	<category id="ldap" icon="ldap.png" />
 
@@ -50,7 +50,7 @@
             <items>ignore</items>
             <items>follow</items>
         </widget>
-        <widget id="derefAliases" inputName="referralHandling" xsi:type="definition:Select" readOnly="true" >
+        <widget id="derefAliases" inputName="derefAliases" xsi:type="definition:Select" readOnly="true" >
             <items>SEARCHING</items>
             <items>NEVER</items>
             <items>ALWAYS</items>
