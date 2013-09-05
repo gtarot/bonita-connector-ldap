@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>bonita-connector-ldap</artifactId>
-    <version>6.1.0-SNAPSHOT</version>
+    <version>6.1.0-rc-03</version>
     <packaging>pom</packaging>
 
     <build>
@@ -34,7 +34,7 @@
         <developerConnection>scm:git:git@github.com:bonitasoft/bonita-connector-ldap.git</developerConnection>
         <connection>scm:git:git@github.com:bonitasoft/bonita-connector-ldap.git</connection>
         <url>https://github.com/bonitasoft/bonita-connector-ldap</url>
-        <tag>HEAD</tag>
+        <tag>bonita-connector-ldap-6.1.0-rc-03</tag>
     </scm>
 
 </project>
