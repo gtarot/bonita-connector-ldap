@@ -76,7 +76,7 @@ public class LdapConnectorTest extends TestCase {
 
     private LdapConnector getDirectoryServiceSettings() {
         connector = new LdapConnector();
-        connector.setHost("192.168.1.212");
+        connector.setHost("ci-212.rd.lan");
         connector.setPort(10389);
         connector.setProtocol(LdapProtocol.LDAP);
         connector.setUserName("cn=Directory Manager");
@@ -89,7 +89,7 @@ public class LdapConnectorTest extends TestCase {
 
     private LdapConnector getSSLDirectoryServiceSettings() {
         connector = new LdapConnector();
-        connector.setHost("192.168.1.212");
+        connector.setHost("ci-212.rd.lan");
         connector.setPort(10636);
         connector.setProtocol(LdapProtocol.LDAPS);
         connector.setUserName("cn=Directory Manager");
