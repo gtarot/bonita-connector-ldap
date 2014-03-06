@@ -1,27 +1,27 @@
 /**
- * Copyright (C) 2006  Bull S. A. S.
- * Bull, Rue Jean Jaures, B.P.68, 78340, Les Clayes-sous-Bois
- * This library is free software; you can redistribute it and/or modify it under the terms
- * of the GNU Lesser General Public License as published by the Free Software Foundation
- * version 2.1 of the License.
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- * You should have received a copy of the GNU Lesser General Public License along with this
- * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
- * Floor, Boston, MA  02110-1301, USA.
- **/
+ * Copyright (C) 2009-2014 BonitaSoft S.A.
+ * BonitaSoft, 32 rue Gustave Eiffel - 38000 Grenoble
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2.0 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.bonitasoft.connectors.ldap;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import junit.framework.TestCase;
-import org.bonitasoft.engine.connector.ConnectorException;
+
 import org.bonitasoft.engine.connector.ConnectorValidationException;
 import org.bonitasoft.engine.exception.BonitaException;
 
@@ -47,24 +47,6 @@ public class LdapConnectorTest extends TestCase {
         super.tearDown();
     }
 
-
-    private void execute() {
-        try {
-            connector.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("Impossible: The execution should not throw any exception");
-        }
-    }
-
-    private void failServiceUnavailableExecute() {
-        try {
-            connector.execute();
-            fail("ServiceUnavailableException should have been thrown");
-        } catch (ConnectorException e) {
-        }
-    }
-
     private LdapConnector getBasicSettings() {
         connector = new LdapConnector();
         connector.setHost("localhost");
@@ -74,31 +56,9 @@ public class LdapConnectorTest extends TestCase {
         return connector;
     }
 
-    private LdapConnector getDirectoryServiceSettings() {
-        connector = new LdapConnector();
-        connector.setHost("ci-212.rd.lan");
-        connector.setPort(10389);
-        connector.setProtocol(LdapProtocol.LDAP);
-        connector.setUserName("cn=Directory Manager");
-        connector.setPassword("bonita-secret");
-        connector.setBaseObject("ou=people,dc=bonita,dc=org");
-        connector.setScope(LdapScope.ONELEVEL);
-        connector.setFilter("(cn=*o*)");
-        return connector;
-    }
+    
 
-    private LdapConnector getSSLDirectoryServiceSettings() {
-        connector = new LdapConnector();
-        connector.setHost("ci-212.rd.lan");
-        connector.setPort(10636);
-        connector.setProtocol(LdapProtocol.LDAPS);
-        connector.setUserName("cn=Directory Manager");
-        connector.setPassword("bonita-secret");
-        connector.setBaseObject("ou=people,dc=bonita,dc=org");
-        connector.setScope(LdapScope.ONELEVEL);
-        connector.setFilter("(cn=*o*)");
-        return connector;
-    }
+    
 
     public void testValidate() {
         connector = new LdapConnector();
@@ -184,7 +144,6 @@ public class LdapConnectorTest extends TestCase {
 
     public void testValidateValues() throws ConnectorValidationException {
         connector = getBasicSettings();
-        connector = getDirectoryServiceSettings();
         connector.validateInputParameters();
     }
 
@@ -398,171 +357,12 @@ public class LdapConnectorTest extends TestCase {
         }
     }
 
-    public void testSearchAUserWithAllAttributes() {
-        connector = getDirectoryServiceSettings();
-        connector.setFilter("(cn=John D*)");
-        execute();
+    
 
-        List<List<LdapAttribute>> list = connector.getLdapAttributeList();
-        assertEquals(1, list.size());
+    
 
-        LdapAttribute email = new LdapAttribute("mail", "john.doe@bonita.org");
-        LdapAttribute cn = new LdapAttribute("cn", "John Doe");
-        LdapAttribute uid = new LdapAttribute("uid", "doej");
-        LdapAttribute person = new LdapAttribute("objectClass", "person");
-        LdapAttribute org = new LdapAttribute("objectClass",
-                "organizationalPerson");
-        LdapAttribute inet = new LdapAttribute("objectClass", "inetOrgPerson");
-        LdapAttribute top = new LdapAttribute("objectClass", "top");
-        LdapAttribute sn = new LdapAttribute("sn", "Doe");
-        List<LdapAttribute> attributes =list.get(0);
-        assertEquals(9, attributes.size());
-        assertTrue(attributes.contains(sn));
-        assertTrue(attributes.contains(email));
-        assertTrue(attributes.contains(uid));
-        assertTrue(attributes.contains(cn));
-        assertTrue(attributes.contains(inet));
-        assertTrue(attributes.contains(person));
-        assertTrue(attributes.contains(org));
-        assertTrue(attributes.contains(top));
-        // Do not check password because it is only a reference
-        // to the real password, it changes depending on the configuration
-    }
-
-    public void testSearchUsersWithSomeEntryAttributes() {
-        connector = getDirectoryServiceSettings();
-        connector.setAttributes(new String[]{"cn", "mail"});
-        connector.setFilter("(|(cn=John D*)(cn=Pierre*))");
-        execute();
-        List<List<LdapAttribute>> list = connector.getLdapAttributeList();
-        assertEquals(2, list.size());
-
-        LdapAttribute johnEmail = new LdapAttribute("mail", "john.doe@bonita.org");
-        LdapAttribute john = new LdapAttribute("cn", "John Doe");
-        LdapAttribute pierre = new LdapAttribute("cn", "Pierre Dupont");
-        LdapAttribute pierreEmail = new LdapAttribute(
-                "mail", "pierre.dupont@bonita.org");
-        for (List<LdapAttribute> attributes : list) {
-            assertEquals(2, attributes.size());
-            assertTrue((attributes.contains(john) && attributes.contains(johnEmail))
-                    || (attributes.contains(pierre) && attributes.contains(pierreEmail)));
-        }
-    }
-
-    public void testSearchUsersWithSizeLimit() {
-        connector = getDirectoryServiceSettings();
-        connector.setFilter("(!(cn=Matt*))");
-        execute();
-        assertEquals(5, connector.getLdapAttributeList().size());
-
-        connector.setSizeLimit(3);
-        execute();
-        assertEquals(3, connector.getLdapAttributeList().size());
-
-        connector.setSizeLimit(new Long(3L));
-        execute();
-        assertEquals(3, connector.getLdapAttributeList().size());
-
-        connector.setSizeLimit(3L);
-        execute();
-        assertEquals(3, connector.getLdapAttributeList().size());
-    }
-
-    public void testSearchUsersWithSizeLimitMoreThanResults() {
-        connector = getDirectoryServiceSettings();
-        connector.setFilter("(|(cn=John D*)(cn=Pierre*))");
-        execute();
-        assertEquals(2, connector.getLdapAttributeList().size());
-
-        connector.setSizeLimit(10);
-        execute();
-        assertEquals(2, connector.getLdapAttributeList().size());
-    }
-
-    public void testSearchUsersWithAnonymousAccess() {
-        connector = getDirectoryServiceSettings();
-        connector.setUserName(null);
-        connector.setPassword(null);
-        connector.setFilter("(|(cn=John D*)(cn=Pierre*))");
-        execute();
-        assertEquals(2, connector.getLdapAttributeList().size());
-    }
-
-    public void testGroupUsersSearch() {
-        connector = getDirectoryServiceSettings();
-        connector.setBaseObject("ou=groups,dc=bonita,dc=org");
-        connector.setFilter("(cn=B-team)");
-        connector.setAttributes(new String[] {"uniqueMember"});
-        connector.setScope(LdapScope.SUBTREE);
-        execute();
-        List<List<LdapAttribute>> list = connector.getLdapAttributeList();
-        assertEquals(1, list.size());
-        List<LdapAttribute> attributes = list.get(0);
-        LdapAttribute john = new LdapAttribute("uniqueMember",
-                "cn=John Doe,ou=people,dc=bonita,dc=org");
-        LdapAttribute pierre = new LdapAttribute("uniqueMember",
-                "cn=Pierre Dupont,ou=people,dc=bonita,dc=org");
-        assertTrue(attributes.contains(john));
-        assertTrue(attributes.contains(pierre));
-    }
-
-    public void testGetEmailFromUserID() {
-        connector = getDirectoryServiceSettings();
-        connector.setBaseObject("ou=people,dc=bonita,dc=org");
-        connector.setFilter("(uid=doej)");
-        connector.setAttributes(new String[] {"mail"});
-        connector.setScope(LdapScope.SUBTREE);
-        execute();
-        assertEquals(1, connector.getLdapAttributeList().size());
-        LdapAttribute expected = new LdapAttribute("mail", "john.doe@bonita.org");
-        LdapAttribute actual = connector.getLdapAttributeList().get(0).get(0);
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getValue(), actual.getValue());
-    }
-
-    public void testSearchOnAnLDAPSDirectory() {
-        connector = getSSLDirectoryServiceSettings();
-        connector.setProtocol(LdapProtocol.LDAP);
-        failServiceUnavailableExecute();
-    }
-
-    public void testSearchWithSSLSupportOnAnLDAPDirectory() {
-        connector = getDirectoryServiceSettings();
-        connector.setProtocol(LdapProtocol.LDAPS);
-        try {
-            connector.execute();
-            fail("CommunicationException should have been thrown");
-        } catch (ConnectorException e) {
-
-        }
-    }
-
-    public void testSearchWithSSLSupportOnAnLDAPDirectoryUsingTLS() throws Exception {
-        connector = getSSLDirectoryServiceSettings();
-        connector.setProtocol(LdapProtocol.TLS);
-        failServiceUnavailableExecute();
-    }
-
-    public void testFailAuthenticationBadPassword() {
-        connector = getDirectoryServiceSettings();
-        connector.setPassword("badPassword");
-        try {
-            connector.execute();
-            fail("AuthenticationException should have been thrown");
-        } catch (ConnectorException e) {
-        }
-    }
-
-    public void testFailAuthenticationBadUserName() {
-        connector = getDirectoryServiceSettings();
-        connector.setUserName("cn=Directory User");
-        try {
-            connector.execute();
-            fail("AuthenticationException should have been thrown");
-        } catch (ConnectorException e) {
-
-        }
-    }
+    
+    
 
     public void testSetTimeLimitWithANegativeValue() {
         connector = getBasicSettings();
@@ -639,34 +439,7 @@ public class LdapConnectorTest extends TestCase {
         connector.validateInputParameters();
     }
 
-    public void testSearchUsersFollowingRefferal() {
-        connector = getDirectoryServiceSettings();
-        connector.setBaseObject("ou=people,dc=bonita,dc=org");
-        connector.setFilter("(uid=doej)");
-        connector.setAttributes(new String[] {"mail"});
-        connector.setScope(LdapScope.SUBTREE);
-        execute();
-        assertEquals(1, connector.getLdapAttributeList().size());
-        LdapAttribute expected = new LdapAttribute("mail", "john.doe@bonita.org");
-        LdapAttribute actual = connector.getLdapAttributeList().get(0).get(0);
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getValue(), actual.getValue());
-    }
-
-    public void testUserPasswordAttribute() throws Exception {
-        connector = getDirectoryServiceSettings();
-        connector.setFilter("(uid=doej)");
-        connector.setScope(LdapScope.SUBTREE);
-        connector.setAttributes(new String[] { "userPassword" });
-        connector.execute();
-        List<List<LdapAttribute>> attributeList = connector.getLdapAttributeList();
-        assertEquals(1, attributeList.size());
-        List<LdapAttribute> attributes = attributeList.get(0);
-        assertEquals(1, attributes.size());
-        LdapAttribute password = attributes.get(0);
-        assertEquals("userPassword", password.getName());
-        assertEquals("{SSHA}T+zTRpbU3JlZpSLvcaGJcWlPVaUbwTAenqJSTA==", password.getValue());
-    }
+    
 
   /*public void testGetEmailFromUserIDWithSSLSupport() {
     connector = getSSLDirectoryServiceSettings();
