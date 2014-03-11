@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>bonita-connector-ldap</artifactId>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
 	<properties>

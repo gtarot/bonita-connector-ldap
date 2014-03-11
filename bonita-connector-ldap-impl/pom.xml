@@ -9,16 +9,17 @@
     </parent>
 
     <artifactId>bonita-connector-ldap-impl</artifactId>
-
+	<version>1.0.0</version>
+	
     <properties>
-        <implementation.id>ldap</implementation.id>
+        <definition.version>1.0.0</definition.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>bonita-connector-ldap-def</artifactId>
-            <version>${project.version}</version>
+            <version>${definition.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
