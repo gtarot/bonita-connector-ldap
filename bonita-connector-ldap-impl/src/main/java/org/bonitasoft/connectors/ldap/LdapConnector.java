@@ -5,14 +5,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2.0 of the License, or
  * (at your option) any later version.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.bonitasoft.connectors.ldap;
 
@@ -45,9 +43,9 @@ import org.bonitasoft.engine.connector.ConnectorValidationException;
  * This connector provides an LDAP service of querying directory service. This connector does the search operation.
  *
  * @author Matthieu Chaffotte
- *
  */
 public class LdapConnector extends AbstractConnector {
+
     // Input
     public static String HOST = "host";
     public static String PORT = "port";
@@ -65,7 +63,6 @@ public class LdapConnector extends AbstractConnector {
 
     // Output
     public static String LDAP_ATTRIBUTE_LIST = "ldapAttributeList";
-
 
     /**
      * The host name of the directory service.
@@ -242,13 +239,8 @@ public class LdapConnector extends AbstractConnector {
     }
 
     public void setDerefAliases(final String derefAliases) {
-        this.derefAliases = LdapDereferencingAlias.ALWAYS;
-        if (derefAliases.equals("never")) {
-            this.derefAliases = LdapDereferencingAlias.NEVER;
-        } else if (derefAliases.equals("finding")) {
-            this.derefAliases = LdapDereferencingAlias.FINDING;
-        } else if (derefAliases.equals("searching")) {
-            this.derefAliases = LdapDereferencingAlias.SEARCHING;
+        if (derefAliases != null && !derefAliases.isEmpty()) {
+            this.derefAliases = LdapDereferencingAlias.valueOf(derefAliases.toUpperCase());
         }
     }
 
@@ -309,6 +301,7 @@ public class LdapConnector extends AbstractConnector {
         this.referralHandling = referralHandling;
     }
 
+    @Override
     public void setInputParameters(Map<String, Object> parameters) {
         setHost((String) parameters.get(HOST));
         setPort((Integer) parameters.get(PORT));
@@ -350,7 +343,7 @@ public class LdapConnector extends AbstractConnector {
         final LdapContext ctx;
         try {
             ctx = new InitialLdapContext(env, null);
-        } catch (NamingException e) {
+        } catch (final NamingException e) {
             throw new ConnectorException(e);
         }
 
@@ -405,24 +398,24 @@ public class LdapConnector extends AbstractConnector {
                 }
             }
             setOutputParameter(LDAP_ATTRIBUTE_LIST, result);
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             throw new ConnectorException(e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new ConnectorException(e);
-        } catch (NamingException e) {
+        } catch (final NamingException e) {
             throw new ConnectorException(e);
         } finally {
             if (LdapProtocol.TLS.equals(getProtocol()) && response != null) {
                 try {
                     response.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new ConnectorException(e);
                 }
             }
 
             try {
                 ctx.close();
-            } catch (NamingException e) {
+            } catch (final NamingException e) {
                 throw new ConnectorException(e);
             }
         }
@@ -445,7 +438,6 @@ public class LdapConnector extends AbstractConnector {
                 errors.add("username cannot be empty!");
             }
         }
-
 
         if (baseObject == null || baseObject.length() == 0) {
             errors.add("baseObject cannot be empty!");
@@ -509,6 +501,14 @@ public class LdapConnector extends AbstractConnector {
             errors.add("referralHandling is null!");
         } else if (!getReferralHandling().equals("ignore") && !getReferralHandling().equals("follow")) {
             errors.add("referralHandling must be either ignore or follow!");
+        }
+        final String derefAliases = (String) getInputParameter(DEREF_ALIASES);
+        if (derefAliases != null && !derefAliases.isEmpty()) {
+            try {
+                LdapDereferencingAlias.valueOf(derefAliases);
+            } catch (final IllegalArgumentException e) {
+                throw new ConnectorValidationException(String.format("%s is not a valid dereferencing alias.", derefAliases));
+            }
         }
 
         if (!errors.isEmpty()) {
