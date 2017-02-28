@@ -8,21 +8,21 @@
 	<category id="ldap" icon="ldap.png" />
 
 	<input name="host" type="java.lang.String" defaultValue="" mandatory="true" />
-    <input name="port" type="java.lang.Integer" defaultValue="389" mandatory="true" />
-    <input name="protocol" type="java.lang.String" defaultValue="LDAP" mandatory="true" />
-    <input name="username" type="java.lang.String" defaultValue="userName" mandatory="true" />
-    <input name="password" type="java.lang.String" defaultValue="password" mandatory="true" />
-    <input name="baseObject" type="java.lang.String" defaultValue="" mandatory="true" />
-    <input name="scope" type="java.lang.String" defaultValue="subtree" mandatory="true" />
-    <input name="filter" type="java.lang.String" defaultValue="" mandatory="true" />
-    <input name="attributes" type="java.lang.String" defaultValue="" mandatory="true" />
-    <input name="sizeLimit" type="java.lang.Long" defaultValue="1500" mandatory="true" />
-    <input name="pageSize" type="java.lang.Long" defaultValue="1000" mandatory="true" />
-    <input name="timeLimit" type="java.lang.Long" defaultValue="1" mandatory="true" />
-    <input name="referralHandling" type="java.lang.String" defaultValue="ignore" mandatory="true" />
-    <input name="derefAliases" type="java.lang.String" defaultValue="ALWAYS" mandatory="true" />
+	<input name="port" type="java.lang.Integer" defaultValue="389" mandatory="true" />
+	<input name="protocol" type="java.lang.String" defaultValue="LDAP" mandatory="true" />
+	<input name="username" type="java.lang.String" defaultValue="userName" mandatory="true" />
+	<input name="password" type="java.lang.String" defaultValue="password" mandatory="true" />
+	<input name="baseObject" type="java.lang.String" defaultValue="" mandatory="true" />
+	<input name="scope" type="java.lang.String" defaultValue="subtree" mandatory="true" />
+	<input name="filter" type="java.lang.String" defaultValue="" mandatory="true" />
+	<input name="attributes" type="java.lang.String" defaultValue="" mandatory="true" />
+	<input name="sizeLimit" type="java.lang.Long" defaultValue="1500" mandatory="true" />
+	<input name="pageSize" type="java.lang.Long" defaultValue="1000" mandatory="true" />
+	<input name="timeLimit" type="java.lang.Long" defaultValue="1" mandatory="true" />
+	<input name="referralHandling" type="java.lang.String" defaultValue="ignore" mandatory="true" />
+	<input name="derefAliases" type="java.lang.String" defaultValue="ALWAYS" mandatory="true" />
 
-    <output name="ldapAttributeList" type="java.util.List" />
+	<output name="ldapAttributeList" type="java.util.List" />
 
 	<page id="server">
 		<widget id="host" inputName="host" xsi:type="definition:Text" />
