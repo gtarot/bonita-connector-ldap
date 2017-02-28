@@ -16,7 +16,8 @@
     <input name="scope" type="java.lang.String" defaultValue="subtree" mandatory="true" />
     <input name="filter" type="java.lang.String" defaultValue="" mandatory="true" />
     <input name="attributes" type="java.lang.String" defaultValue="" mandatory="true" />
-    <input name="sizeLimit" type="java.lang.Long" defaultValue="500" mandatory="true" />
+    <input name="sizeLimit" type="java.lang.Long" defaultValue="1500" mandatory="true" />
+    <input name="pageSize" type="java.lang.Long" defaultValue="1000" mandatory="true" />
     <input name="timeLimit" type="java.lang.Long" defaultValue="1" mandatory="true" />
     <input name="referralHandling" type="java.lang.String" defaultValue="ignore" mandatory="true" />
     <input name="derefAliases" type="java.lang.String" defaultValue="ALWAYS" mandatory="true" />
@@ -25,37 +26,38 @@
 
 	<page id="server">
 		<widget id="host" inputName="host" xsi:type="definition:Text" />
-        <widget id="port" inputName="port" xsi:type="definition:Text" />
-        <widget id="protocol" inputName="protocol" xsi:type="definition:Select" readOnly="false">
-            <items>TLS</items>
-            <items>LDAPS</items>
-            <items>LDAP</items>
-        </widget>
-        <widget id="username" inputName="username" xsi:type="definition:Text" />
-        <widget id="password" inputName="password" xsi:type="definition:Password" />
+		<widget id="port" inputName="port" xsi:type="definition:Text" />
+		<widget id="protocol" inputName="protocol" xsi:type="definition:Select" readOnly="false">
+		    <items>TLS</items>
+		    <items>LDAPS</items>
+		    <items>LDAP</items>
+		</widget>
+		<widget id="username" inputName="username" xsi:type="definition:Text" />
+		<widget id="password" inputName="password" xsi:type="definition:Password" />
 	</page>
 
 	<page id="search">
 		<widget id="baseObject" inputName="baseObject" xsi:type="definition:Text" />
-        <widget id="filter" inputName="filter" xsi:type="definition:Text" />
-        <widget id="attributes" inputName="attributes" xsi:type="definition:Text" />
-        <widget id="scope" inputName="scope" xsi:type="definition:Select" readOnly="true" >
-            <items>BASE</items>
-            <items>ONELEVEL</items>
-            <items>SUBTREE</items>
-        </widget>
-        <widget id="sizeLimit" inputName="sizeLimit" xsi:type="definition:Text" />
-        <widget id="timeLimit" inputName="timeLimit" xsi:type="definition:Text" />
-        <widget id="referralHandling" inputName="referralHandling" xsi:type="definition:Select" readOnly="true" >
-            <items>ignore</items>
-            <items>follow</items>
-        </widget>
-        <widget id="derefAliases" inputName="derefAliases" xsi:type="definition:Select" readOnly="true" >
-            <items>SEARCHING</items>
-            <items>NEVER</items>
-            <items>ALWAYS</items>
-            <items>FINDING</items>
-        </widget>
+		<widget id="filter" inputName="filter" xsi:type="definition:Text" />
+		<widget id="attributes" inputName="attributes" xsi:type="definition:Text" />
+		<widget id="scope" inputName="scope" xsi:type="definition:Select" readOnly="true" >
+		    <items>BASE</items>
+		    <items>ONELEVEL</items>
+		    <items>SUBTREE</items>
+		</widget>
+		<widget id="sizeLimit" inputName="sizeLimit" xsi:type="definition:Text" />
+		<widget id="pageSize" inputName="pageSize" xsi:type="definition:Text" />
+		<widget id="timeLimit" inputName="timeLimit" xsi:type="definition:Text" />
+		<widget id="referralHandling" inputName="referralHandling" xsi:type="definition:Select" readOnly="true" >
+		    <items>ignore</items>
+		    <items>follow</items>
+		</widget>
+		<widget id="derefAliases" inputName="derefAliases" xsi:type="definition:Select" readOnly="true" >
+		    <items>SEARCHING</items>
+		    <items>NEVER</items>
+		    <items>ALWAYS</items>
+		    <items>FINDING</items>
+		</widget>
     </page>
 
 </definition:ConnectorDefinition>
